@@ -3,9 +3,13 @@ import 'package:receitas/constants.dart';
 import 'package:receitas/models/receita.dart';
 
 class ReceitaDetalhes extends StatefulWidget {
-  ReceitaDetalhes({super.key, required this.receita});
+  ReceitaDetalhes(
+      {super.key,
+      required this.receita,
+      required this.listaDeReceitasPreferidas});
 
   final Receita receita;
+  final List<Receita> listaDeReceitasPreferidas;
 
   late String recipe = receita.recipe;
   late int numCharacters = recipe.length;
@@ -37,7 +41,9 @@ class _ReceitaDetalhesState extends State<ReceitaDetalhes> {
                         alignment: Alignment.topLeft,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            //Navigator.pop(context);
+                            Navigator.of(context)
+                                .popUntil((route) => route.isFirst);
                           },
                           style: ButtonStyle(
                             minimumSize: MaterialStateProperty.all<Size>(
@@ -56,11 +62,23 @@ class _ReceitaDetalhesState extends State<ReceitaDetalhes> {
                           onPressed: () {
                             setState(() {
                               widget.receita.fav = !widget.receita.fav;
+
+                              if (widget.listaDeReceitasPreferidas
+                                  .contains(widget.receita)) {
+                                widget.listaDeReceitasPreferidas
+                                    .remove(widget.receita);
+                              } else {
+                                widget.listaDeReceitasPreferidas
+                                    .add(widget.receita);
+                              }
+
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ReceitaDetalhes(
                                     receita: widget.receita,
+                                    listaDeReceitasPreferidas:
+                                        widget.listaDeReceitasPreferidas,
                                   ),
                                 ),
                               );

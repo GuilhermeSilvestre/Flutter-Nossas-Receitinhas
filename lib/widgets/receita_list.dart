@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:receitas/models/data.dart';
 import 'package:receitas/models/receita.dart';
 import 'package:receitas/receitadetalhes.dart';
 
 class ReceitaList extends StatelessWidget {
-  const ReceitaList({super.key, required this.receitas});
+  const ReceitaList({
+    super.key,
+    required this.receitas,
+    required this.listaDeReceitasPreferidas,
+  });
 
   final List<Receita> receitas;
+  final List<Receita> listaDeReceitasPreferidas;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +55,7 @@ class ReceitaList extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => ReceitaDetalhes(
                     receita: receitas[index],
+                    listaDeReceitasPreferidas: listaDeReceitasPreferidas,
                   ),
                 ),
               );

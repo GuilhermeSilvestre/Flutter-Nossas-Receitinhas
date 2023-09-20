@@ -1,8 +1,8 @@
-// import 'dart:convert';
-// import 'package:receitas/models/receita.dart';
 import 'package:flutter/material.dart';
 import 'package:receitas/constants.dart';
 import 'package:receitas/models/data.dart';
+import 'package:receitas/models/receita.dart';
+import 'package:receitas/receitadetalhes.dart';
 import 'package:receitas/trocarnome.dart';
 import 'package:receitas/widgets/receita_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,8 +15,10 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  //Variáveis iniciais dos SharedPreferences
   String nomeUsuario = "(seu nome)";
   int numReceitas = 0;
+  List<Receita> listaDeReceitasPreferidas = [];
 
   // Função para recuperar o nome do SharedPreferences
   Future<String?> _recuperarNome() async {
@@ -24,15 +26,24 @@ class _HomepageState extends State<Homepage> {
     return prefs.getString('nome');
   }
 
-  // Função para recuperar a quantidade de receitas salvas no SharedPreferences
-  Future<int?> _recuperarNumReceitas() async {
+  // Função para recuperar as receitas do SharedPreferences
+  Future<List<Receita>> _recuperarReceitas() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getInt('receitas');
+    List<String>? receitasJson = prefs.getStringList('receitas');
+
+    if (receitasJson != null) {
+      return receitasJson
+          .map((json) => Receita.fromJson(json as Map<String, dynamic>))
+          .toList();
+    }
+    return [];
   }
 
   @override
   void initState() {
     super.initState();
+
+    //Carregar Nome
     _recuperarNome().then((nome) {
       setState(() {
         if (nome == null) {
@@ -43,13 +54,10 @@ class _HomepageState extends State<Homepage> {
       });
     });
 
-    _recuperarNumReceitas().then((receitas) {
+    //Carregar receitas favoritas
+    _recuperarReceitas().then((receitas) {
       setState(() {
-        if (receitas == null) {
-          numReceitas = 0;
-        } else {
-          numReceitas = receitas;
-        }
+        listaDeReceitasPreferidas = receitas;
       });
     });
   }
@@ -64,8 +72,7 @@ class _HomepageState extends State<Homepage> {
           body: Container(
             decoration: corDeFundoDetalhes,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                  16, 48, 16, 16), // Define o espaçamento
+              padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
@@ -90,7 +97,7 @@ class _HomepageState extends State<Homepage> {
                             color: Color.fromARGB(255, 185, 47, 172),
                           ),
                         ),
-                        numReceitas == 0
+                        listaDeReceitasPreferidas.isEmpty
                             ? const Column(
                                 children: [
                                   SizedBox(
@@ -107,16 +114,87 @@ class _HomepageState extends State<Homepage> {
                                   ),
                                 ],
                               )
-                            : Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 60,
+                            : Container(
+                                margin:
+                                    const EdgeInsets.fromLTRB(30, 40, 30, 10),
+                                height: 500,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.black,
+                                    width: 2,
                                   ),
-                                  Text(
-                                    'Exibir as estrelas voce salvou $numReceitas',
-                                    textAlign: TextAlign.center,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        Text(
+                                          'Você salvou ${listaDeReceitasPreferidas.length} receita(s)!',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            color: Color.fromARGB(
+                                                255, 105, 18, 96),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 30,
+                                        ),
+                                        for (var receitaPreferida
+                                            in listaDeReceitasPreferidas)
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              const SizedBox(
+                                                height: 15,
+                                              ),
+                                              Text(
+                                                receitaPreferida.title,
+                                                style: const TextStyle(
+                                                    fontSize: 28,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Cookie',
+                                                    color: Color.fromARGB(
+                                                        255, 176, 92, 209)),
+                                              ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ReceitaDetalhes(
+                                                        receita:
+                                                            receitaPreferida,
+                                                        listaDeReceitasPreferidas:
+                                                            listaDeReceitasPreferidas,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Image.asset(
+                                                  receitaPreferida.imageLink,
+                                                  height: 130,
+                                                  width: 130,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                      ],
+                                    ),
                                   ),
-                                ],
+                                ),
                               ),
                       ],
                     ),
@@ -142,7 +220,7 @@ class _HomepageState extends State<Homepage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => const TrocarNome(),
-                            ), // Substitua com o construtor apropriado de ReceitaDetalhes
+                            ),
                           );
                         },
                         child: const Text(
@@ -205,7 +283,10 @@ class _HomepageState extends State<Homepage> {
           },
         ),
       ),
-      body: ReceitaList(receitas: listaDeReceitas),
+      body: ReceitaList(
+        receitas: listaDeReceitas,
+        listaDeReceitasPreferidas: listaDeReceitasPreferidas,
+      ),
     );
   }
 }

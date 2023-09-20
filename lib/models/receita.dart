@@ -14,5 +14,25 @@ class Receita {
   String recipe;
   bool fav;
 
-  static fromJson(json) {}
+  Map<String, dynamic> toJson() {
+    return {
+      'fav': fav,
+      'title': title,
+      'imageLink': imageLink,
+      'kcal': kcal,
+      'timeToMake': timeToMake,
+      'recipe': recipe,
+    };
+  }
+
+  factory Receita.fromJson(Map<String, dynamic> json) {
+    return Receita(
+      fav: json['fav'],
+      title: json['title'],
+      imageLink: json['imageLink'],
+      kcal: json['kcal'],
+      timeToMake: json['timeToMake'],
+      recipe: json['recipe'],
+    );
+  }
 }
