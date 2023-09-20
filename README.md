@@ -1,16 +1,8 @@
-# receitas
+# Nossas Receitinhas
 
-A new Flutter project.
+Projeto de receitas
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![2](https://github.com/GuilhermeSilvestre/Flutter-Nossas-Receitinhas/assets/100291684/108578e6-2591-43ae-9e27-a05d924f3fbb)
+![1](https://github.com/GuilhermeSilvestre/Flutter-Nossas-Receitinhas/assets/100291684/42764675-a061-4803-8b2c-21d9d5b2b770)
