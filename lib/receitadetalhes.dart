@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:receitas/constants.dart';
 import 'package:receitas/models/receita.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ReceitaDetalhes extends StatefulWidget {
   ReceitaDetalhes(
@@ -20,6 +21,20 @@ class ReceitaDetalhes extends StatefulWidget {
 }
 
 class _ReceitaDetalhesState extends State<ReceitaDetalhes> {
+  //Salvar receitas no celular
+  void salvarReceitasFavoritas(List<Receita> receitas) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Converte a lista de receitas para uma lista de strings em formato JSON
+    List<String> receitasJson = receitas
+        .map((receita) => receita.toJsonString())
+        .toList()
+        .cast<String>();
+
+    // Salva a lista de strings no SharedPreferences
+    await prefs.setStringList('receitas', receitasJson);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -71,6 +86,10 @@ class _ReceitaDetalhesState extends State<ReceitaDetalhes> {
                                 widget.listaDeReceitasPreferidas
                                     .add(widget.receita);
                               }
+
+                              // Salva uma lista atualizada de receitas favoritas no SharedPreferences
+                              salvarReceitasFavoritas(
+                                  widget.listaDeReceitasPreferidas);
 
                               Navigator.pushReplacement(
                                 context,

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:receitas/constants.dart';
 import 'package:receitas/models/data.dart';
@@ -33,9 +35,10 @@ class _HomepageState extends State<Homepage> {
 
     if (receitasJson != null) {
       return receitasJson
-          .map((json) => Receita.fromJson(json as Map<String, dynamic>))
+          .map((json) => Receita.fromJson(jsonDecode(json)))
           .toList();
     }
+
     return [];
   }
 

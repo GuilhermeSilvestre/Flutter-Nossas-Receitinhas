@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Receita {
   Receita(
       {required this.title,
@@ -34,5 +36,18 @@ class Receita {
       timeToMake: json['timeToMake'],
       recipe: json['recipe'],
     );
+  }
+
+  String toJsonString() {
+    Map<String, dynamic> json = {
+      'title': title,
+      'imageLink': imageLink,
+      'kcal': kcal,
+      'timeToMake': timeToMake,
+      'recipe': recipe,
+      'fav': fav,
+    };
+
+    return jsonEncode(json);
   }
 }
