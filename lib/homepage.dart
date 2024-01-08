@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:receitas/addreceita.dart';
 import 'package:receitas/constants.dart';
 import 'package:receitas/models/data.dart';
 import 'package:receitas/models/receita.dart';
@@ -91,7 +92,7 @@ class _HomepageState extends State<Homepage> {
                           ),
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
                         const Text(
                           'Aqui estão suas receitas favoritas:',
@@ -211,12 +212,28 @@ class _HomepageState extends State<Homepage> {
                           Navigator.pop(context);
                         },
                         child: const Text(
-                          'Voltar para as receitas',
+                          'Voltar',
                           style: TextStyle(
                             color: Color.fromARGB(255, 249, 30, 227),
                           ),
                         ),
                       ),
+                      // OutlinedButton(
+                      //   onPressed: () {
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (context) => const AddReceita(),
+                      //       ),
+                      //     );
+                      //   },
+                      //   child: const Text(
+                      //     'Adicionar receita',
+                      //     style: TextStyle(
+                      //       color: Color.fromARGB(255, 249, 30, 227),
+                      //     ),
+                      //   ),
+                      // ),
                       OutlinedButton(
                         onPressed: () {
                           Navigator.push(
@@ -241,7 +258,7 @@ class _HomepageState extends State<Homepage> {
                     color: Color.fromARGB(255, 190, 27, 142),
                   ),
                   const Text(
-                    '© 2023 TuRtLeDz. All rights reserved.',
+                    '© 2024 GSilvestre. All rights reserved.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,

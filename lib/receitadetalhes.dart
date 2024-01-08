@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:receitas/constants.dart';
 import 'package:receitas/models/receita.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ReceitaDetalhes extends StatefulWidget {
   ReceitaDetalhes(
@@ -37,6 +38,10 @@ class _ReceitaDetalhesState extends State<ReceitaDetalhes> {
 
   @override
   Widget build(BuildContext context) {
+    String formattedIngredients = widget.receita.ingredientes
+        .map((item) => item.replaceAll(RegExp(r'[\[\]]'), ''))
+        .join('\n');
+
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -130,9 +135,25 @@ class _ReceitaDetalhesState extends State<ReceitaDetalhes> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        widget.receita.imageLink,
-                        fit: BoxFit.cover,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PhotoView(
+                                imageProvider:
+                                    AssetImage(widget.receita.imageLink),
+                                backgroundDecoration: const BoxDecoration(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        child: Image.asset(
+                          widget.receita.imageLink,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                       const SizedBox(
                         height: 20,
@@ -159,6 +180,20 @@ class _ReceitaDetalhesState extends State<ReceitaDetalhes> {
                           Text(
                             'Calorias: ${widget.receita.kcal}',
                             style: textoDetalhes,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          const Text(
+                            'Ingredientes:',
+                            style: textoDetalhes,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            ' $formattedIngredients',
+                            style: textoIngredientes,
                           ),
                           const SizedBox(
                             height: 8,

@@ -6,6 +6,7 @@ class Receita {
       required this.imageLink,
       required this.kcal,
       required this.recipe,
+      required this.ingredientes,
       required this.timeToMake,
       required this.fav});
 
@@ -14,6 +15,7 @@ class Receita {
   int kcal;
   int timeToMake; // in minutes
   String recipe;
+  List<String> ingredientes;
   bool fav;
 
   Map<String, dynamic> toJson() {
@@ -23,17 +25,24 @@ class Receita {
       'imageLink': imageLink,
       'kcal': kcal,
       'timeToMake': timeToMake,
+      'ingredientes': ingredientes,
       'recipe': recipe,
     };
   }
 
   factory Receita.fromJson(Map<String, dynamic> json) {
+    List<String> ingredientesList = (json['ingredientes'] as List<dynamic>?)
+            ?.map((ingrediente) => ingrediente.toString())
+            .toList() ??
+        [];
+
     return Receita(
       fav: json['fav'],
       title: json['title'],
       imageLink: json['imageLink'],
       kcal: json['kcal'],
       timeToMake: json['timeToMake'],
+      ingredientes: ingredientesList,
       recipe: json['recipe'],
     );
   }
@@ -44,6 +53,7 @@ class Receita {
       'imageLink': imageLink,
       'kcal': kcal,
       'timeToMake': timeToMake,
+      'ingredientes': ingredientes,
       'recipe': recipe,
       'fav': fav,
     };

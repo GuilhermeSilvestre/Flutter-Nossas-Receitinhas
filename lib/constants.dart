@@ -26,3 +26,8 @@ const textoDetalhes = TextStyle(
   fontFamily: 'Cookie',
   fontSize: 24,
 );
+
+const textoIngredientes = TextStyle(
+  fontFamily: 'Cookie',
+  fontSize: 20,
+);
